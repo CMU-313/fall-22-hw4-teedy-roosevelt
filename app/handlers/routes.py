@@ -18,6 +18,8 @@ def configure_routes(app):
 
     @app.route('/predict')
     def predict():
+        # Receives student data and outputs 1 if they should be
+        # accepted and 0 if they should not be
         age = request.args.get('age')
         absences = request.args.get('absences')
         health = request.args.get('health')
@@ -33,6 +35,8 @@ def configure_routes(app):
     
     @app.route('/grade')
     def grade():
+        # Receives student data and outputs what their expected
+        # G3 grade is
         age = request.args.get('age')
         absences = request.args.get('absences')
         health = request.args.get('health')
