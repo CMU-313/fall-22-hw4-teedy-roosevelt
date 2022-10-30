@@ -37,7 +37,7 @@ def training_data(request):
 def acceptable_ratio():
     return 0.75
     
-def test_dummy(training_data, acceptable_ratio):
+def test_predict_accuracy(training_data, acceptable_ratio):
     app = Flask(__name__)
     configure_routes(app)
     client = app.test_client()
