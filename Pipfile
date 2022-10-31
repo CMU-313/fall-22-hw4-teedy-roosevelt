@@ -6,7 +6,7 @@ name = "pypi"
 [packages]
 pandas = "*"
 numpy = "*"
-sklearn = "0.21.3"
+sklearn = "0.22"
 joblib = "*"
 flask = "*"
 pytest = "*"
@@ -14,7 +14,7 @@ pytest = "*"
 [dev-packages]
 pandas = "*"
 numpy = "*"
-sklearn = "0.21.3"
+sklearn = "0.22"
 joblib = "*"
 
 [requires]
