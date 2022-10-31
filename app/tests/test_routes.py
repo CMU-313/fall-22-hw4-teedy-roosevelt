@@ -7,27 +7,6 @@ import random
 
 from app.handlers.routes import configure_routes
 
-data_file_len = 0
-data_from_students = []
-testing_students = []
-
-with open("test_csv.csv") as file:
-    csv_reader = csv.reader(file)
-    for row in csv_reader:
-        data_from_students.append(row)
-        testing_students.append(row)
-        data_file_len += 1
-
-print(data_from_students)
-print("data file len", data_file_len)
-
-#want 80% of the data to be put into training so we want to randomly pick 
-num_training_students = math.floor(data_file_len*(.80))
-print("num training students", num_training_students)
-
-#so we want to randomly pick 316 indeces and to use as our training data
-training_students = []
-
 #training_indeces = random.sample(range(0, data_file_len), num_training_students)
 
 #generated only once from this code: random.sample(range(0, data_file_len), num_training_students)
@@ -49,12 +28,16 @@ training_indeces = [229, 247, 346, 288, 143, 212, 258, 265, 189, 385, 106, 284,
 191, 125, 219, 71, 250, 19, 309, 53, 182, 21, 230, 322, 341, 186, 16, 26, 208, 244, 42, 48, 
 86, 134, 171, 103, 237, 379]
 
-for idx in training_indeces:
-    training_students.append(data_from_students[idx])
-    testing_students.remove(data_from_students[idx])
 
-#so len of testing data is 80
-#len of training data is 316
+
+df = pd.read_csv("data/student-mat.csv", sep=";")
+testing_indeces = list(range(len(df) + 1))
+for idx in training_indeces:
+    testing_indeces.remove(idx)
+
+#so now test indices should contain all other indeces that training indeces does not
+
+combined_indeces = list(range(len(df)))
 
 
 def test_base_route():
@@ -84,23 +67,14 @@ def acceptable_grade_tolerance():
 # Todo: fill in actual data
 @pytest.fixture(
     params=[
-        pytest.param(
-            pd.DataFrame({ 'age' : pd.Series([1, 10, 100]) ,'health' : pd.Series([15, 18, 4]) ,'absences' : pd.Series([10, 0, 4]), "G3": pd.Series([5, 18, 3])}),
-            id="training"
-        ),
-        pytest.param(
-            pd.DataFrame({ 'age' : pd.Series([1, 10, 100]) ,'health' : pd.Series([15, 18, 4]) ,'absences' : pd.Series([10, 0, 4]), "G3": pd.Series([12, 13, 8])}),
-            id="test"
-        ),
-        pytest.param(
-            pd.DataFrame({ 'age' : pd.Series([1, 10, 100]) ,'health' : pd.Series([15, 18, 4]) ,'absences' : pd.Series([10, 0, 4]), "G3": pd.Series([12, 13, 8])}),
-            id="combined"
-        )
+        pytest.param(training_indeces, id="training"),  
+        pytest.param(testing_indeces, id="training"),
+        pytest.param(combined_indeces, id="combined"),
     ]
 )
 def student_data(request):
     """The various combinations of student data used for testing"""
-    return request.param
+    return df.iloc[request.param]
     
 def test_predict_accuracy(student_data, acceptable_predict_accuracy):
     """Tests the accuracy of the /predict endpoint"""
