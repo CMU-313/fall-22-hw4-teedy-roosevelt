@@ -10,6 +10,7 @@ sklearn = "*"
 joblib = "*"
 flask = "*"
 pytest = "*"
+scikit-learn = "==0.21.3"
 
 [dev-packages]
 pandas = "*"
