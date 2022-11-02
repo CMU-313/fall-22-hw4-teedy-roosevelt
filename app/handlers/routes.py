@@ -18,7 +18,25 @@ def configure_routes(app):
 
     @app.route('/predict')
     def predict():
-        #use entries from the query string here but could also use json
+        # Receives student data and outputs 1 if they should be
+        # accepted and 0 if they should not be
+        age = request.args.get('age')
+        absences = request.args.get('absences')
+        health = request.args.get('health')
+        data = [[age], [health], [absences]]
+        query_df = pd.DataFrame({
+            'age': pd.Series(age),
+            'health': pd.Series(health),
+            'absences': pd.Series(absences)
+        })
+        query = pd.get_dummies(query_df)
+        prediction = clf.predict(query)
+        return jsonify(1 if np.asscalar(prediction) >= 15 else 0)
+    
+    @app.route('/grade')
+    def grade():
+        # Receives student data and outputs what their expected
+        # G3 grade is
         age = request.args.get('age')
         absences = request.args.get('absences')
         health = request.args.get('health')
@@ -31,3 +49,4 @@ def configure_routes(app):
         query = pd.get_dummies(query_df)
         prediction = clf.predict(query)
         return jsonify(np.asscalar(prediction))
+
