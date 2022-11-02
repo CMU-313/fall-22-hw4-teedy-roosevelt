@@ -62,7 +62,7 @@ def student_data(request, training_data, training_indices, testing_indices, comb
 def acceptable_predict_accuracy():
     """The minimum accuracy required for the accept/reject predictions to be
        considered sufficiently correct."""
-    return 0.75
+    return 0.9
 
 
 @pytest.fixture

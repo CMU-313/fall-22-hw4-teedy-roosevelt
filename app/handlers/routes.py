@@ -8,8 +8,8 @@ import os
 def configure_routes(app):
 
     this_dir = os.path.dirname(__file__)
-    model_path = os.path.join(this_dir, "model.pkl")
-    clf = joblib.load(model_path)
+    predict_clf = joblib.load(os.path.join(this_dir, "predict_model.pkl"))
+    grade_clf = joblib.load(os.path.join(this_dir, "grade_model.pkl"))
 
     @app.route('/')
     def hello():
@@ -21,16 +21,16 @@ def configure_routes(app):
         # Receives student data and outputs 1 if they should be
         # accepted and 0 if they should not be
         age = request.args.get('age')
-        absences = request.args.get('absences')
-        health = request.args.get('health')
-        data = [[age], [health], [absences]]
+        failures = request.args.get('failures')
+        g1 = request.args.get('G1')
+        g2 = request.args.get('G2')
         query_df = pd.DataFrame({
             'age': pd.Series(age),
-            'health': pd.Series(health),
-            'absences': pd.Series(absences)
+            'failures': pd.Series(failures),
+            'g1': pd.Series(g1),
+            'g2': pd.Series(g2)
         })
-        query = pd.get_dummies(query_df)
-        prediction = clf.predict(query)
+        prediction = predict_clf.predict(query_df)
         return jsonify(1 if np.asscalar(prediction) >= 15 else 0)
     
     @app.route('/grade')
@@ -38,15 +38,15 @@ def configure_routes(app):
         # Receives student data and outputs what their expected
         # G3 grade is
         age = request.args.get('age')
-        absences = request.args.get('absences')
-        health = request.args.get('health')
-        data = [[age], [health], [absences]]
+        failures = request.args.get('failures')
+        g1 = request.args.get('G1')
+        g2 = request.args.get('G2')
         query_df = pd.DataFrame({
             'age': pd.Series(age),
-            'health': pd.Series(health),
-            'absences': pd.Series(absences)
+            'failures': pd.Series(failures),
+            'g1': pd.Series(g1),
+            'g2': pd.Series(g2)
         })
-        query = pd.get_dummies(query_df)
-        prediction = clf.predict(query)
+        prediction = grade_clf.predict(query_df)
         return jsonify(np.asscalar(prediction))
 
