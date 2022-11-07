@@ -20,15 +20,15 @@ def configure_routes(app):
     def predict():
         # Receives student data and outputs 1 if they should be
         # accepted and 0 if they should not be
-        age = request.args.get('age')
         failures = request.args.get('failures')
         g1 = request.args.get('G1')
         g2 = request.args.get('G2')
+        school = request.args.get('school') == 'GP'
         query_df = pd.DataFrame({
-            'age': pd.Series(age),
             'failures': pd.Series(failures),
             'g1': pd.Series(g1),
-            'g2': pd.Series(g2)
+            'g2': pd.Series(g2),
+            'school': pd.Series(school)
         })
         prediction = predict_clf.predict(query_df)
         return jsonify(1 if np.asscalar(prediction) >= 15 else 0)
@@ -37,15 +37,15 @@ def configure_routes(app):
     def grade():
         # Receives student data and outputs what their expected
         # G3 grade is
-        age = request.args.get('age')
         failures = request.args.get('failures')
         g1 = request.args.get('G1')
         g2 = request.args.get('G2')
+        school = request.args.get('school') == 'GP'
         query_df = pd.DataFrame({
-            'age': pd.Series(age),
             'failures': pd.Series(failures),
             'g1': pd.Series(g1),
-            'g2': pd.Series(g2)
+            'g2': pd.Series(g2),
+            'school': pd.Series(school)
         })
         prediction = grade_clf.predict(query_df)
         return jsonify(np.asscalar(prediction))
