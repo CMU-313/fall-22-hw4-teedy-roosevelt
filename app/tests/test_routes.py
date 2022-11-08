@@ -32,8 +32,6 @@ def test_predict_accuracy(student_data, acceptable_predict_accuracy):
     # of them were correctly accepted/rejected
     correct = 0
     total = 0
-    result = student_data.copy()
-    result["error"] = 0
     
     # Loop over each student in the input data and make the request to
     # the /predict endpoint
@@ -49,9 +47,6 @@ def test_predict_accuracy(student_data, acceptable_predict_accuracy):
         # Increase the number of correct predictions if the responses
         # matches the expected value
         correct += int(response.get_data()) == exp
-        result["error"][i] = int(response.get_data()) == exp
-
-    print(result["error"].to_string())
         
     # Verify that the correctness ratio is above the minimum requirement
     assert correct / total >= acceptable_predict_accuracy
