@@ -57,6 +57,20 @@ To do, you should run the following command from the root of your repository:
 pipenv run jupyter notebook
 ```
 
+## Features used by model
+
+We have two API endpoints, each one predicting different things. 
+
+The predict API endpoint predicts whether the G3 score of a student will be 
+greater than or equal to 15. The features utilized to train the machine learning 
+model to make this prediction are 'failurees', 'g1', 'g2', 'school', 'sex'. 
+
+The grade API endpoint predicts the G3 score of a student. The features utilized to 
+train the machine learning model are 'failures', 'g1', 'g2', 'school', and 'sex'.
+
+The prediction accuracy percentage improved from 18% to 98%, while the g3 grade average error 
+prediction went from 5.3 to 2.9. 
+
 ## API Endpoints
 
 You should also use pipenv to run your Flask API server.
