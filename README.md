@@ -69,7 +69,7 @@ The grade API endpoint predicts the G3 score of a student. The features utilized
 train the machine learning model are 'failures', 'g1', 'g2', 'school', and 'sex'.
 
 The prediction accuracy percentage improved from 18% to 98%, while the g3 grade average error 
-prediction went from 5.3 to 2.9.
+prediction went from 5.3 to 2.9. 
 
 ## API Endpoints
 
