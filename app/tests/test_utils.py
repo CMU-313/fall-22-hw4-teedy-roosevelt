@@ -41,19 +41,49 @@ def combined_indices(training_data):
     return list(range(len(training_data)))
 
 
+@pytest.fixture
+def GP_indices(training_data):
+    return [i for i in range(len(training_data)) if training_data["school"].iloc[i] == "GP"]
+
+
+@pytest.fixture
+def MS_indices(training_data):
+    return [i for i in range(len(training_data)) if training_data["school"].iloc[i] == "MS"]
+
+
+@pytest.fixture
+def male_indices(training_data):
+    return [i for i in range(len(training_data)) if training_data["sex"].iloc[i] == "M"]
+
+
+@pytest.fixture
+def female_indices(training_data):
+    return [i for i in range(len(training_data)) if training_data["sex"].iloc[i] == "F"]
+
+
 @pytest.fixture(
     params=[
         pytest.param("testing"),
         pytest.param("training"),  
         pytest.param("combined"),
+        pytest.param("GP"),
+        pytest.param("MS"),
+        pytest.param("male"),
+        pytest.param("female"),
     ]
 )
-def student_data(request, training_data, training_indices, testing_indices, combined_indices):
-    """The various combinations of student data used for testing"""
+def student_data(request, training_data, training_indices, testing_indices, combined_indices, GP_indices, MS_indices, male_indices, female_indices):
+    """The various combinations of student data used for testing. The idea is that
+       each combination should have accurace above the required ratio, lest one
+       particular group be disproportionately maligned by the algortihm."""
     indices = {
         "training": training_indices,
         "testing": testing_indices,
         "combined": combined_indices,
+        "GP": GP_indices,
+        "MS": MS_indices,
+        "male": male_indices,
+        "female": female_indices
     }[request.param]
     return training_data.iloc[indices]
 
@@ -62,11 +92,11 @@ def student_data(request, training_data, training_indices, testing_indices, comb
 def acceptable_predict_accuracy():
     """The minimum accuracy required for the accept/reject predictions to be
        considered sufficiently correct."""
-    return 0.75
+    return 0.85
 
 
 @pytest.fixture
 def acceptable_grade_tolerance():
     """The maximum average error required for the grade predictions to be
        considered sufficiently correct."""
-    return 2
+    return 3

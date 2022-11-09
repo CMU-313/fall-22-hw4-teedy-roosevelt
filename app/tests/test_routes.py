@@ -35,7 +35,7 @@ def test_predict_accuracy(student_data, acceptable_predict_accuracy):
     
     # Loop over each student in the input data and make the request to
     # the /predict endpoint
-    for _, row in student_data.iterrows():
+    for i, row in student_data.iterrows():
         exp = 1 if row["G3"] >= 15 else 0
         url = '/predict'
         response = client.get(url, query_string=row.drop("G3").to_dict())
